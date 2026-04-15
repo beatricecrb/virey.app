@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virey — Your space. Your pace. Your clarity.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F2D4A;
+    --teal: #1D9E75;
+    --teal-light: #5DCAA5;
+    --cream: #F9F5ED;
+    --cream-dark: #EDE8DC;
+    --text-muted: #7A8A96;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* subtle grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: rgba(249,245,237,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(15,45,74,0.06);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .logo .spark {
+    position: absolute;
+    top: -6px;
+    left: -2px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .nav-cta {
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #1B3A5C; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8rem 3rem 4rem;
+    max-width: 780px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--navy);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.35s;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--teal);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: #3D5A6E;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+
+  .waitlist-form {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 460px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.65s;
+  }
+
+  .waitlist-form input {
+    flex: 1;
+    padding: 0.9rem 1.25rem;
+    border: 1.5px solid rgba(15,45,74,0.18);
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    background: white;
+    color: var(--navy);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .waitlist-form input::placeholder { color: var(--text-muted); }
+  .waitlist-form input:focus { border-color: var(--teal); }
+
+  .waitlist-form button {
+    padding: 0.9rem 1.75rem;
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .waitlist-form button:hover { background: #1B3A5C; transform: translateY(-1px); }
+
+  .form-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.75s;
+  }
+
+  /* decorative ocean line */
+  .ocean-line {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(15,45,74,0.12), transparent);
+    margin: 0 3rem;
+    width: calc(100% - 6rem);
+  }
+
+  /* PROBLEM SECTION */
+  .section {
+    padding: 5rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    max-width: 560px;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-body {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #3D5A6E;
+    line-height: 1.75;
+    max-width: 520px;
+  }
+
+  /* PAIN POINTS */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .pain-card {
+    background: white;
+    border: 1px solid rgba(15,45,74,0.08);
+    border-radius: 16px;
+    padding: 1.75rem;
+  }
+
+  .pain-icon {
+    width: 36px; height: 36px;
+    background: var(--cream-dark);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 16px;
+  }
+
+  .pain-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+
+  .pain-desc {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: #3D5A6E;
+    line-height: 1.65;
+  }
+
+  /* IDENTITY SECTION */
+  .identity-section {
+    background: var(--navy);
+    padding: 5rem 3rem;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .identity-section::before {
+    content: 'Virey';
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 20rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .identity-section .section-label { color: var(--teal-light); }
+  .identity-section .section-title { color: var(--cream); max-width: 600px; }
+  .identity-section .section-body { color: rgba(240,235,224,0.65); }
+
+  .identity-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 2.5rem;
+  }
+
+  .identity-tag {
+    padding: 0.6rem 1.25rem;
+    border: 1px solid rgba(93,202,165,0.3);
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: rgba(240,235,224,0.8);
+    transition: border-color 0.2s, color 0.2s;
+    cursor: default;
+  }
+  .identity-tag:hover { border-color: var(--teal-light); color: var(--cream); }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .feat-card {
+    background: white;
+    border: 1px solid rgba(15,45,74,0.08);
+    border-radius: 16px;
+    padding: 1.75rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .feat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--cream-dark);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 40px;
+  }
+
+  .feat-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+
+  .feat-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: #3D5A6E;
+    line-height: 1.65;
+  }
+
+  /* FOUNDER */
+  .founder-section {
+    padding: 5rem 3rem;
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .founder-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    flex: 1;
+  }
+
+  .founder-quote em {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .founder-bio {
+    flex: 0 0 240px;
+  }
+
+  .founder-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .founder-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+
+  .founder-role {
+    font-size: 0.825rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* FINAL CTA */
+  .cta-section {
+    background: var(--navy);
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-section .section-title {
+    color: var(--cream);
+    margin: 0 auto 1rem;
+    text-align: center;
+    max-width: 500px;
+  }
+
+  .cta-section .section-body {
+    color: rgba(240,235,224,0.6);
+    margin: 0 auto 2.5rem;
+    text-align: center;
+  }
+
+  .cta-form {
+    display: flex;
+    gap: 10px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .cta-form input {
+    flex: 1;
+    padding: 0.9rem 1.25rem;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    background: rgba(255,255,255,0.07);
+    color: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .cta-form input::placeholder { color: rgba(240,235,224,0.35); }
+  .cta-form input:focus { border-color: var(--teal-light); }
+
+  .cta-form button {
+    padding: 0.9rem 1.75rem;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .cta-form button:hover { background: var(--teal-light); transform: translateY(-1px); }
+
+  .cta-note {
+    font-size: 0.8rem;
+    color: rgba(240,235,224,0.35);
+    margin-top: 0.875rem;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .footer-links a {
+    font-size: 0.8rem;
+    color: rgba(240,235,224,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: rgba(240,235,224,0.8); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none;
+    font-size: 0.9rem;
+    color: var(--teal);
+    font-weight: 500;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 680px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero, .section, .founder-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .pain-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .founder-section { flex-direction: column; gap: 2rem; }
+    .founder-bio { flex: unset; }
+    .waitlist-form { flex-direction: column; }
+    .cta-form { flex-direction: column; }
+    .identity-section, .cta-section, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .divider { margin: 0 1.5rem; width: calc(100% - 3rem); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">
+    <svg class="spark" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="7" y1="0" x2="7" y2="14" stroke="#1D9E75" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="0" y1="7" x2="14" y2="7" stroke="#1D9E75" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="2" y1="2" x2="12" y2="12" stroke="#1D9E75" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="12" y1="2" x2="2" y2="12" stroke="#1D9E75" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    Virey
+  </a>
+  <button class="nav-cta" onclick="document.getElementById('waitlist-email').focus()">Join the waitlist</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Now building — early access open</div>
+  <h1>You don't need<br>more apps. You need<br><em>one space.</em></h1>
+  <p class="hero-sub">Virey brings your tasks, thoughts, and daily plans into one calm place — so you can finally feel in control of your day.</p>
+  <form class="waitlist-form" onsubmit="handleSubmit(event, 'hero-success')">
+    <input id="waitlist-email" type="email" placeholder="your@email.com" required />
+    <button type="submit">Join the waitlist</button>
+  </form>
+  <p class="form-note">Free to start. No credit card. Be the first to shape Virey.</p>
+  <p class="success-msg" id="hero-success">You're on the list! We'll be in touch soon.</p>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-label">The problem</div>
+  <h2 class="section-title">Daily life is overwhelming — and the tools we use make it worse.</h2>
+  <p class="section-body">Most people manage their days across five different apps. Nothing talks to each other. The result is mental clutter, missed tasks, and a constant low-level anxiety that you're falling behind.</p>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-icon">📱</div>
+      <div class="pain-title">Too many places</div>
+      <div class="pain-desc">Tasks live in one app, ideas in another, plans somewhere else. Nothing connects.</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🧊</div>
+      <div class="pain-title">Cold and clinical</div>
+      <div class="pain-desc">Most apps feel built for productivity robots — not real, overwhelmed humans.</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🌀</div>
+      <div class="pain-title">No single space</div>
+      <div class="pain-desc">There's no tool that combines planning, reflection, and organisation with warmth.</div>
+    </div>
+  </div>
+</section>
+
+<section class="identity-section">
+  <div class="section-label">Built on Atomic Habits</div>
+  <h2 class="section-title">Don't just track habits. Become the person.</h2>
+  <p class="section-body">Lasting change starts with identity. Virey is built around who you're becoming — not just what you need to do today.</p>
+  <div class="identity-tags">
+    <span class="identity-tag">I am someone who plans their week</span>
+    <span class="identity-tag">I am someone who writes things down</span>
+    <span class="identity-tag">I am someone who reflects</span>
+    <span class="identity-tag">I am someone who shows up for themselves</span>
+    <span class="identity-tag">I am someone who stays calm under pressure</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">The product</div>
+  <h2 class="section-title">One space. Everything in it.</h2>
+  <p class="section-body">Six tools built around how you actually think and feel — not how a productivity robot works.</p>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-num">01</div>
+      <div>
+        <div class="feat-title">Daily planner</div>
+        <div class="feat-desc">Just what matters today. Tasks, appointments, priorities — clear and calm every morning.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">02</div>
+      <div>
+        <div class="feat-title">Personal diary</div>
+        <div class="feat-desc">A private space to write. One line or a thousand words — no pressure, no prompts.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">03</div>
+      <div>
+        <div class="feat-title">Brain dump</div>
+        <div class="feat-desc">Capture ideas the moment they arrive. No folders, no categories — just get it out of your head.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">04</div>
+      <div>
+        <div class="feat-title">Weekly review</div>
+        <div class="feat-desc">Every Sunday, a gentle 3-minute check-in. Closure and a clean start to the week.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">05</div>
+      <div>
+        <div class="feat-title">Goals tracker</div>
+        <div class="feat-desc">Your big and small goals, visible every day. A quiet reminder of what you're building.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">06</div>
+      <div>
+        <div class="feat-title">Mood check-in</div>
+        <div class="feat-desc">One tap each morning. Low energy? Virey adapts your view automatically.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="founder-section">
+  <div class="founder-quote">
+    "I built Virey because <em>I needed it.</em> I was overwhelmed, scattered across five apps, desperate for one clear space to think. If that sounds familiar — this is for you."
+  </div>
+  <div class="founder-bio">
+    <div class="founder-avatar">BC</div>
+    <div class="founder-name">Beatrice</div>
+    <div class="founder-role">Founder & creator of Virey<br>Dublin, Ireland</div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2 class="section-title">Ready to feel in control?</h2>
+  <p class="section-body">Join the waitlist and be the first to shape Virey. Free forever to start.</p>
+  <form class="cta-form" onsubmit="handleSubmit(event, 'cta-success')">
+    <input type="email" placeholder="your@email.com" required />
+    <button type="submit">Get early access</button>
+  </form>
+  <p class="cta-note" id="cta-success" style="display:none;color:var(--teal-light);">You're on the list! Talk soon.</p>
+  <p class="cta-note">Virey — your space. Your pace. Your clarity.</p>
+</section>
+
+<footer>
+  <a class="footer-logo" href="#">Virey</a>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+function handleSubmit(e, successId) {
+  e.preventDefault();
+  const form = e.target;
+  const success = document.getElementById(successId);
+  form.style.display = 'none';
+  if (success) success.style.display = 'block';
+}
+</script>
+
+</body>
+</html>
